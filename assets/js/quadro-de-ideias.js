@@ -1,50 +1,71 @@
-// Obtém referências para os elementos do HTML
-const notebook = document.getElementById('notebook');
-const saveButton = document.getElementById('saveButton');
-const loadButton = document.getElementById('loadButton');
-const clearButton = document.getElementById('clearButton');
+document.addEventListener('DOMContentLoaded', () => {
+    const notebook = document.getElementById('notebook');
+    const saveButton = document.getElementById('saveButton');
+    const clearButton = document.getElementById('clearButton');
+    const textColorPicker = document.getElementById('textColorPicker');
+    const colorPickerLabel = document.getElementById('colorPickerLabel');
+    const fontSizeSelector = document.getElementById('fontSizeSelector');
 
-// A chave que usaremos para salvar no localStorage
-const storageKey = 'myNotebookText';
+    const storageKey = 'myNotebookContent'; // Changed key to reflect HTML content
 
-// Função para salvar o texto no localStorage
-function saveText() {
-    const textToSave = notebook.value;
-    localStorage.setItem(storageKey, textToSave);
-    alert('Texto salvo com sucesso!');
-}
+    // Set initial label color
+    colorPickerLabel.style.color = textColorPicker.value;
 
-// Função para carregar o texto do localStorage
-function loadText() {
-    const savedText = localStorage.getItem(storageKey);
-    if (savedText) {
-        notebook.value = savedText;
-        alert('Texto carregado com sucesso!');
-    } else {
-        alert('Nenhum texto salvo para carregar.');
+    // --- Funções de Persistência ---
+    function saveContent() {
+        const contentToSave = notebook.innerHTML;
+        localStorage.setItem(storageKey, contentToSave);
+        alert('Conteúdo salvo com sucesso!');
     }
-}
 
-// Função para limpar o texto
-function clearText() {
-    // Limpa a área de texto na página
-    notebook.value = '';
-    // Remove o item do localStorage
-    localStorage.removeItem(storageKey);
-    alert('Texto limpo e removido do armazenamento local!');
-}
 
-// Adiciona os "ouvintes" de eventos aos botões
-saveButton.addEventListener('click', saveText);
-loadButton.addEventListener('click', loadText);
-clearButton.addEventListener('click', clearText);
-
-// Opcional: Carregar o texto automaticamente ao abrir a página
-// Essa é uma forma mais "inteligente" de um bloco de notas
-// Isso faz com que o texto persista mesmo se o usuário não clicar em "Salvar"
-window.addEventListener('load', () => {
-    const savedText = localStorage.getItem(storageKey);
-    if (savedText) {
-        notebook.value = savedText;
+    function clearContent() {
+        notebook.innerHTML = '';
+        localStorage.removeItem(storageKey);
+        alert('Conteúdo limpo e removido do armazenamento local!');
     }
+    
+    // --- Funções da Barra de Ferramentas ---
+    function applyTextColor(color) {
+        notebook.focus();
+        document.execCommand('foreColor', false, color);
+    }
+
+    function applyFontSize(size) {
+        notebook.focus();
+        document.execCommand('fontSize', false, size);
+    }
+
+    // --- Event Listeners ---
+    saveButton.addEventListener('click', saveContent);
+    clearButton.addEventListener('click', clearContent);
+    
+    textColorPicker.addEventListener('input', () => {
+        const selectedColor = textColorPicker.value;
+        colorPickerLabel.style.color = selectedColor;
+        applyTextColor(selectedColor);
+    });
+
+    fontSizeSelector.addEventListener('change', () => {
+        const selectedSize = fontSizeSelector.value;
+        applyFontSize(selectedSize);
+    });
+
+    // Carregar o conteúdo automaticamente ao abrir a página
+    window.addEventListener('load', () => {
+        const savedContent = localStorage.getItem(storageKey);
+        if (savedContent) {
+            notebook.innerHTML = savedContent;
+        }
+    });
+    
+    // Opcional: salvar automaticamente ao parar de digitar
+    let saveTimeout;
+    notebook.addEventListener('input', () => {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+            localStorage.setItem(storageKey, notebook.innerHTML);
+            console.log("Conteúdo salvo automaticamente.");
+        }, 1000); // Salva 1 segundo após a última digitação
+    });
 });

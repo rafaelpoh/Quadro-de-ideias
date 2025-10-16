@@ -14,10 +14,24 @@ body {
     width: 100%;
     max-width: 900px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     padding: 0 10px;
+    gap: 15px;
+}
+
+#toolbar label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5em;
+    color: #4b4b4b;
+}
+
+#toolbar input[type="color"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    background-color: white;
 }
 
 h1 {
@@ -26,6 +40,7 @@ h1 {
     color: #4b4b4b;
     text-shadow: 2px 2px #ccc;
     margin: 0;
+    margin-right: auto; /* Pushes following items to the right */
 }
 
 #addNoteBtn {

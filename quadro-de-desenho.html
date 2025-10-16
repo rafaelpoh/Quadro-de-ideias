@@ -12,7 +12,7 @@
   </head>
   <body>
     <div id="toolbar">
-      <label for="colorPicker">Cor:</label>
+      <label for="colorPicker"><i class="bi bi-palette"></i>Cor:</label>
       <input type="color" id="colorPicker" value="#000000" />
 
       <span class="separator"></span>
@@ -23,9 +23,9 @@
 
       <span class="separator"></span>
 
+      <button id="undo-button">Desfazer <i class="bi bi-arrow-90deg-left"></i></button>
       <button id="clear-canvas">Limpar Quadro</button>
       <button id="saveButton">Salvar Desenho</button>
-      <button id="saveLocalButton">Salvar Localmente</button>
     </div>
     <canvas id="drawingCanvas"></canvas>
     <script src="./assets/js/quadro-de-desenhos.js"></script>

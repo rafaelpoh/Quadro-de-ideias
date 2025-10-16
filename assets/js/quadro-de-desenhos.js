@@ -12,15 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Botões de Ação
     const saveButton = document.getElementById('saveButton');
-    const saveLocalButton = document.getElementById('saveLocalButton');
+    const undoButton = document.getElementById('undo-button');
 
     let drawing = false;
+    let history = [];
+    let historyStep = -1;
     let currentTool = 'brush'; // Ferramenta padrão
+    let lastPos = null;
 
     function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
         loadLocalDrawing(); 
+        initHistory();
     }
 
     function setActiveTool(tool) {
@@ -36,12 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startPosition(e) {
         drawing = true;
+        saveHistory();
+        lastPos = getMousePos(canvas, e);
         draw(e);
     }
 
     function endPosition() {
         drawing = false;
         ctx.beginPath();
+        lastPos = null;
+        saveDrawingLocally(); // Salva automaticamente
     }
 
     function getMousePos(canvas, evt) {
@@ -52,20 +60,113 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function eraseInCircle(x, y, radius, colorToErase) {
+        const startX = Math.floor(Math.max(0, x - radius));
+        const startY = Math.floor(Math.max(0, y - radius));
+        const endX = Math.ceil(Math.min(canvas.width, x + radius));
+        const endY = Math.ceil(Math.min(canvas.height, y + radius));
+        const width = endX - startX;
+        const height = endY - startY;
+
+        if (width <= 0 || height <= 0) return;
+
+        const imageData = ctx.getImageData(startX, startY, width, height);
+        const data = imageData.data;
+        const tolerance = 20; // Aumentar a tolerância para cores com antialiasing
+
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                const currentX = startX + j;
+                const currentY = startY + i;
+
+                const dx = currentX - x;
+                const dy = currentY - y;
+                if (dx * dx + dy * dy <= radius * radius) {
+                    const index = (i * width + j) * 4;
+                    const r = data[index];
+                    const g = data[index + 1];
+                    const b = data[index + 2];
+
+                    if (Math.abs(r - colorToErase[0]) < tolerance &&
+                        Math.abs(g - colorToErase[1]) < tolerance &&
+                        Math.abs(b - colorToErase[2]) < tolerance) {
+                        data[index + 3] = 0; // Tornar transparente
+                    }
+                }
+            }
+        }
+        ctx.putImageData(imageData, startX, startY);
+    }
+
+    function bresenhamLine(x0, y0, x1, y1, callback) {
+        x0 = Math.floor(x0);
+        y0 = Math.floor(y0);
+        x1 = Math.floor(x1);
+        y1 = Math.floor(y1);
+
+        const dx = Math.abs(x1 - x0);
+        const dy = Math.abs(y1 - y0);
+        const sx = (x0 < x1) ? 1 : -1;
+        const sy = (y0 < y1) ? 1 : -1;
+        let err = dx - dy;
+
+        while (true) {
+            callback(x0, y0);
+
+            if ((x0 === x1) && (y0 === y1)) break;
+            const e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; x0 += sx; }
+            if (e2 < dx) { err += dx; y0 += sy; }
+        }
+    }
+
+    function initHistory() {
+        historyStep = 0;
+        history = [ctx.getImageData(0, 0, canvas.width, canvas.height)];
+    }
+
+    function saveHistory() {
+        historyStep++;
+        if (historyStep < history.length) {
+            history.length = historyStep;
+        }
+        history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    }
+
+    function undo() {
+        if (historyStep > 0) {
+            historyStep--;
+            ctx.putImageData(history[historyStep], 0, 0);
+            saveDrawingLocally();
+        }
+    }
+
     function draw(e) {
-        // Só desenha se a ferramenta de pincel estiver ativa
-        if (!drawing || currentTool !== 'brush') return;
-        
+        if (!drawing) return;
+
         const pos = getMousePos(canvas, e);
 
-        ctx.lineWidth = 5;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = colorPicker.value;
+        if (currentTool === 'brush') {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = colorPicker.value;
 
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        } else if (currentTool === 'eraser') {
+            if (lastPos) {
+                const colorToErase = hexToRgba(colorPicker.value);
+                const eraserWidth = 10;
+                bresenhamLine(lastPos.x, lastPos.y, pos.x, pos.y, (x, y) => {
+                    eraseInCircle(x, y, eraserWidth / 2, colorToErase);
+                });
+            }
+        }
+        // Atualiza a última posição para a próxima chamada
+        lastPos = pos;
     }
 
     function saveDrawing() {
@@ -79,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveDrawingLocally() {
         const imageData = canvas.toDataURL('image/png');
         localStorage.setItem('savedDrawing', imageData);
-        alert('Desenho salvo localmente!');
     }
 
     function loadLocalDrawing() {
@@ -93,14 +193,106 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function handleCanvasClick(e) {
+        if (currentTool === 'bucket') {
+            saveHistory();
+            const pos = getMousePos(canvas, e);
+            floodFill(Math.floor(pos.x), Math.floor(pos.y), colorPicker.value);
+        }
+    }
+
+    function hexToRgba(hex) {
+        let r = 0, g = 0, b = 0, a = 255;
+        if (hex.length === 4) {
+            r = parseInt(hex[1] + hex[1], 16);
+            g = parseInt(hex[2] + hex[2], 16);
+            b = parseInt(hex[3] + hex[3], 16);
+        } else if (hex.length === 7) {
+            r = parseInt(hex.substring(1, 3), 16);
+            g = parseInt(hex.substring(3, 5), 16);
+            b = parseInt(hex.substring(5, 7), 16);
+        }
+        return [r, g, b, a];
+    }
+
+    function getPixelColor(imageData, x, y) {
+        const index = (y * canvas.width + x) * 4;
+        return [
+            imageData.data[index],
+            imageData.data[index + 1],
+            imageData.data[index + 2],
+            imageData.data[index + 3]
+        ];
+    }
+
+    function setPixelColor(imageData, x, y, color) {
+        const index = (y * canvas.width + x) * 4;
+        imageData.data[index] = color[0];
+        imageData.data[index + 1] = color[1];
+        imageData.data[index + 2] = color[2];
+        imageData.data[index + 3] = color[3];
+    }
+
+    function colorsMatch(color1, color2) {
+        return color1[0] === color2[0] &&
+               color1[1] === color2[1] &&
+               color1[2] === color2[2] &&
+               color1[3] === color2[3];
+    }
+
+    function floodFill(startX, startY, fillColor) {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const startColor = getPixelColor(imageData, startX, startY);
+        const newColor = hexToRgba(fillColor);
+
+        if (colorsMatch(startColor, newColor)) {
+            return;
+        }
+
+        const pixelStack = [[startX, startY]];
+        const visited = new Set();
+
+        function getPixelKey(x, y) {
+            return `${x},${y}`;
+        }
+
+        while (pixelStack.length > 0) {
+            const [x, y] = pixelStack.pop();
+            const pixelKey = getPixelKey(x, y);
+
+            if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height || visited.has(pixelKey)) {
+                continue;
+            }
+
+            visited.add(pixelKey);
+
+            if (colorsMatch(getPixelColor(imageData, x, y), startColor)) {
+                setPixelColor(imageData, x, y, newColor);
+
+                pixelStack.push([x + 1, y]);
+                pixelStack.push([x - 1, y]);
+                pixelStack.push([x, y + 1]);
+                pixelStack.push([x, y - 1]);
+            }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+
     // --- Event Listeners ---
     window.addEventListener('resize', resizeCanvas);
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('click', handleCanvasClick);
     
     saveButton.addEventListener('click', saveDrawing);
-    saveLocalButton.addEventListener('click', saveDrawingLocally);
+    undoButton.addEventListener('click', undo);
+    clearCanvasBtn.addEventListener('click', () => {
+        saveHistory();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        localStorage.removeItem('savedDrawing'); // Limpa o salvamento local
+    });
 
     brushTool.addEventListener('click', () => setActiveTool('brush'));
     bucketTool.addEventListener('click', () => setActiveTool('bucket'));
