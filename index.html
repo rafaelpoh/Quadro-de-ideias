@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Quadros</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #e9e9e9;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: width 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #sidebar.collapsed {
+            width: 80px;
+            padding: 20px 10px;
+            align-items: center;
+        }
+
+        #sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        #sidebar-header h2 {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        #collapse-btn {
+            cursor: pointer;
+            font-size: 24px;
+            background: none;
+            border: none;
+        }
+        
+        #sidebar.collapsed #sidebar-header h2,
+        #sidebar.collapsed #collapse-btn {
+            display: none;
+        }
+
+        #home-btn {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        #home-btn img {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        #sidebar.collapsed #home-btn {
+            display: block;
+        }
+
+        #menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        #menu li a {
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: background-color 0.2s;
+        }
+
+        #menu li a:hover {
+            background-color: #ddd;
+        }
+
+        #menu li a img {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            border-radius: 4px;
+        }
+        
+        #sidebar.collapsed #menu li a .link-text {
+            display: none;
+        }
+        
+        #sidebar.collapsed #menu li a {
+            justify-content: center;
+        }
+        
+        #sidebar.collapsed #menu li a img {
+            margin-right: 0;
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 0;
+        }
+
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <button id="home-btn"><img src="assets/images/image.png" alt="Home"></button>
+        <div id="sidebar-header">
+            <h2>Quadros</h2>
+        </div>
+        <ul id="menu">
+            <li><a href="quadro-de-desenho.html" class="nav-link"><img src="assets/images/imageqd.png" alt="Icone Quadro de Desenho"><span class="link-text">Quadro de Desenho</span></a></li>
+            <li><a href="quadro-de-ideias.html" class="nav-link"><img src="assets/images/imageqi.png" alt="Icone Quadro de Ideias"><span class="link-text">Quadro de Ideias</span></a></li>
+            <li><a href="quadro-de-postits.html" class="nav-link"><img src="assets/images/imageqp.png" alt="Icone Quadro de Post-its"><span class="link-text">Quadro de Post-its</span></a></li>
+        </ul>
+    </div>
+
+    <div id="main-content">
+        <iframe id="content-frame" name="content-frame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const homeBtn = document.getElementById('home-btn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentFrame = document.getElementById('content-frame');
+        homeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('collapsed');
+            contentFrame.src = 'about:blank';
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('href');
+                contentFrame.src = url;
+                sidebar.classList.add('collapsed');
+            });
+        });
+    </script>
+
+</body>
+</html>

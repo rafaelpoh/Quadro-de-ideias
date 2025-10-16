@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quadro de Desenho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/skinqd.css" />
+  </head>
+  <body>
+    <div id="toolbar">
+      <label for="colorPicker">Cor:</label>
+      <input type="color" id="colorPicker" value="#000000" />
+
+      <span class="separator"></span>
+
+      <button id="brush-tool">Pincel<i class="bi bi-brush"></i></button>
+      <button id="bucket-tool">Balde de Tinta<i class="bi bi-paint-bucket"></i></button>
+      <button id="eraser-tool">Borracha<i class="bi bi-eraser"></i></button>
+
+      <span class="separator"></span>
+
+      <button id="clear-canvas">Limpar Quadro</button>
+      <button id="saveButton">Salvar Desenho</button>
+      <button id="saveLocalButton">Salvar Localmente</button>
+    </div>
+    <canvas id="drawingCanvas"></canvas>
+    <script src="./assets/js/quadro-de-desenhos.js"></script>
+  </body>
+</html>
