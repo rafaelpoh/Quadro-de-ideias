@@ -12,7 +12,7 @@ Bem-vindo ao Quadro de Ferramentas Criativas, uma suíte de ferramentas web proj
 
 ## Como Usar
 
-Abra o arquivo `index.html` no seu navegador para ver o menu principal e navegar entre os diferentes quadros.
+A pagina esta disponivel no link https://rafaelpoh.github.io/Quadro-de-ideias
 
 ## Quadros Disponíveis
 
@@ -40,7 +40,7 @@ Um quadro virtual para criar e gerenciar listas de tarefas e lembretes usando no
 
 ### Quadro de Desenho
 
-Uma tela de desenho digital para esboços e anotações livres. O seu trabalho é salvo automaticamente para que você possa continuar depois.
+As vezes desenhar a ideia ajuda a esclarecer os pensamentos. Uma tela de desenho digital para esboços e anotações livres. O seu trabalho é salvo automaticamente para que você possa continuar depois.
 
 #### Ferramentas
 
