@@ -237,8 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleCanvasClick(e) {
         if (currentTool === 'bucket') {
             saveHistory();
-            const pos = getMousePos(canvas, e);
-            floodFill(Math.floor(pos.x), Math.floor(pos.y), colorPicker.value);
+            const pos = getEventPos(canvas, e);
+            if (pos) {
+                floodFill(Math.floor(pos.x), Math.floor(pos.y), colorPicker.value);
+            }
         }
     }
 
@@ -322,10 +324,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     window.addEventListener('resize', resizeCanvas);
+    // Mouse events
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseleave', endPosition);
     canvas.addEventListener('click', handleCanvasClick);
+
+    // Touch events
+    canvas.addEventListener('touchstart', startPosition, { passive: false });
+    canvas.addEventListener('touchend', endPosition, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
     
     saveButton.addEventListener('click', saveDrawing);
     undoButton.addEventListener('click', undo);
