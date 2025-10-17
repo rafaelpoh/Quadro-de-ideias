@@ -60,6 +60,7 @@ body {
     flex-grow: 1;
     display: block;
     background-color: #fff;
+    touch-action: none;
 }
 
 i{
@@ -68,4 +69,52 @@ i{
 
 .align-right {
     margin-left: auto;
+}
+
+#orientation-warning {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    color: white;
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+#orientation-warning div {
+    padding: 20px;
+}
+
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    #orientation-warning {
+        display: flex;
+    }
+}
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    #toolbar {
+        padding: 5px;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #toolbar button {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+
+    #toolbar button .bi {
+        font-size: 1.2rem;
+    }
+
+    #toolbar label {
+        font-size: 0.9em;
+    }
 }
