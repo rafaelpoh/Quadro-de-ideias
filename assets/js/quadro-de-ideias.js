@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textColorPicker = document.getElementById('textColorPicker');
     const colorPickerLabel = document.getElementById('colorPickerLabel');
     const fontSizeSelector = document.getElementById('fontSizeSelector');
+    const undoButton = document.getElementById('undoButton');
+    const redoButton = document.getElementById('redoButton');
 
     const storageKey = 'myNotebookContent'; // Changed key to reflect HTML content
 
@@ -39,6 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     saveButton.addEventListener('click', saveContent);
     clearButton.addEventListener('click', clearContent);
+
+    undoButton.addEventListener('click', () => {
+        document.execCommand('undo');
+    });
+
+    redoButton.addEventListener('click', () => {
+        document.execCommand('redo');
+    });
     
     textColorPicker.addEventListener('input', () => {
         const selectedColor = textColorPicker.value;
@@ -60,12 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Opcional: salvar automaticamente ao parar de digitar
-    let saveTimeout;
     notebook.addEventListener('input', () => {
-        clearTimeout(saveTimeout);
-        saveTimeout = setTimeout(() => {
-            localStorage.setItem(storageKey, notebook.innerHTML);
-            console.log("Conteúdo salvo automaticamente.");
-        }, 1000); // Salva 1 segundo após a última digitação
+        localStorage.setItem(storageKey, notebook.innerHTML);
     });
 });

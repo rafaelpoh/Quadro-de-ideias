@@ -353,6 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.addEventListener('touchmove', draw, { passive: false });
     
     saveButton.addEventListener('click', saveDrawing);
+    saveLocalButton.addEventListener('click', () => {
+        saveDrawingLocally();
+        alert('Desenho salvo no navegador!');
+    });
     undoButton.addEventListener('click', undo);
     clearCanvasBtn.addEventListener('click', () => {
         saveHistory();

@@ -3,9 +3,7 @@
   - [Quadro de Ferramentas Criativas](#quadro-de-ferramentas-criativas)
   - [Painel de Quadros](#painel-de-quadros)
   - [Quadros Disponíveis](#quadros-disponíveis)
-  - [Quadro de Ideias](#quadro-de-ideias)
-  - [Quadro de Post-its](#quadro-de-post-its)
-  - [Quadro de Desenho](#quadro-de-desenho)
+  - [Uso em Tablets e Celulares](#uso-em-tablets-e-celulares)
   
 ## Como Usar
 
@@ -17,24 +15,19 @@ Bem-vindo ao Quadro de Ferramentas Criativas, uma suíte de ferramentas web proj
 
 ## Painel de Quadros
 
-O ponto de entrada da aplicação é o **Painel de Quadros**, que centraliza o acesso a todas as ferramentas. Ele consiste em uma barra de navegação lateral que permite carregar os diferentes quadros disponíveis:
-
-- **Quadro de Desenho**
-- **Quadro de Ideias**
-- **Quadro de Post-its**
-
-Ao clicar em um dos quadros no menu, ele é carregado na área principal da página, permitindo o uso imediato. O menu então se retrai para dar mais espaço à ferramenta selecionada. Para retornar ao menu principal, basta clicar no ícone no topo da barra lateral.
-
+O ponto de entrada da aplicação é o **Painel de Quadros**, que centraliza o acesso a todas as ferramentas. Ao clicar em um dos quadros no menu, ele é carregado na área principal da página. Para maximizar o espaço de trabalho, o menu lateral se recolhe completamente, deixando visível apenas um botão para retornar ao menu principal.
 
 ## Quadros Disponíveis
 
 ### Quadro de Ideias
 
-Um editor de texto rico para anotar e formatar suas ideias. O conteúdo é salvo automaticamente no navegador, mas um botão de salvar manual está disponível por segurança.
+Um editor de texto rico para anotar e formatar suas ideias. O conteúdo é salvo automaticamente no navegador a cada alteração realizada.
 
 #### Ferramentas
 
-- **Cor do Texto**: Altera a cor do texto selecionado ou do texto que será digitado a seguir. O rótulo "Cor do Texto" serve como uma pré-visualização da cor escolhida.
+- **Desfazer**: Desfaz a última ação de digitação ou formatação.
+- **Refazer**: Refaz a última ação desfeita.
+- **Cor do Texto**: Altera a cor do texto selecionado ou do texto que será digitado a seguir.
 - **Tamanho da Fonte**: Altera o tamanho do texto selecionado ou do texto que será digitado a seguir.
 - **Salvar**: Salva manualmente o conteúdo do quadro.
 - **Limpar**: Apaga todo o conteúdo do quadro.
@@ -52,15 +45,32 @@ Um quadro virtual para criar e gerenciar listas de tarefas e lembretes usando no
 
 ### Quadro de Desenho
 
-As vezes desenhar a ideia ajuda a esclarecer os pensamentos. Uma tela de desenho digital para esboços e anotações livres. O seu trabalho é salvo automaticamente para que você possa continuar depois.
+Uma tela de desenho digital para esboços e anotações livres. O seu trabalho é salvo automaticamente para que você possa continuar depois.
 
 #### Ferramentas
 
-- **Cor**: Seleciona a cor a ser usada pelas ferramentas de Pincel e Balde de Tinta. Também determina a cor que a Borracha irá apagar.
+- **Cor**: Seleciona a cor a ser usada pelas ferramentas de Pincel e Balde de Tinta.
 - **Pincel**: Desenha livremente na tela com a cor e o tamanho selecionados.
 - **Balde de Tinta**: Preenche uma área fechada inteira com a cor selecionada.
 - **Borracha**: Apaga qualquer parte do desenho que corresponda à cor atualmente selecionada.
 - **Linha**: Desenha uma linha reta entre o ponto inicial e final do arrastar do mouse.
-- **Desfazer**: Reverte a última ação realizada no quadro (desenho, preenchimento, apagar ou limpar a tela).
+- **Desfazer**: Reverte a última ação realizada no quadro.
+- **Salvar no Navegador**: Salva manualmente o desenho no armazenamento do navegador, garantindo que o progresso não seja perdido.
+- **Baixar Desenho**: Permite baixar o desenho atual como um arquivo de imagem PNG.
 - **Limpar Quadro**: Apaga todo o desenho da tela.
-- **Salvar Desenho**: Permite baixar o desenho atual como um arquivo de imagem PNG.
+
+## Uso em Tablets e Celulares
+
+A suíte de ferramentas foi projetada para ser responsiva e funcional em dispositivos móveis.
+
+### Quadro de Desenho
+
+Para uma melhor experiência em celulares e tablets, o quadro de desenho possui as seguintes características:
+
+- **Suporte a Toque**: Todas as ferramentas de desenho, como Pincel, Borracha e Linha, funcionam com o toque na tela.
+- **Modo Paisagem**: Em dispositivos móveis, é recomendado o uso no modo paisagem (deitado). Um aviso será exibido para incentivá-lo a girar o dispositivo, garantindo uma área de desenho maior.
+- **Menu Compacto**: No modo paisagem em telas menores, o menu de ferramentas se torna mais compacto para não obstruir a área de desenho.
+
+### Outros Quadros
+
+O Quadro de Ideias e o Quadro de Post-its também são totalmente funcionais em dispositivos móveis, adaptando-se ao tamanho da tela para garantir uma boa usabilidade.
