@@ -59,9 +59,9 @@ body {
         }
 
         #home-btn img {
-            width: 40px;
-            height: 40px;
-            border-radius: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
         }
 
         #sidebar.collapsed #home-btn {
@@ -84,7 +84,7 @@ body {
             color: #333;
             border-radius: 5px;
             margin-bottom: 10px;
-            white-space: nowrap;
+            white-space:wrap;
             overflow: hidden;
             transition: background-color 0.2s;
         }
@@ -94,8 +94,8 @@ body {
         }
 
         #menu li a img {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             margin-right: 15px;
             flex-shrink: 0;
             border-radius: 50%;
