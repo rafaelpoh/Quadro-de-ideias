@@ -113,6 +113,11 @@ body {
             margin-right: 0;
         }
 
+        #sidebar.collapsed #sidebar-header,
+        #sidebar.collapsed #menu {
+            display: none;
+        }
+
         #main-content {
             flex-grow: 1;
             padding: 0;
