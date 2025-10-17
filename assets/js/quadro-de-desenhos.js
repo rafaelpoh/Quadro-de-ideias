@@ -41,7 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startPosition(e) {
-        if (e.type.startsWith('touch')) e.preventDefault();
+        if (e.type.startsWith('touch') && currentTool !== 'bucket') {
+            e.preventDefault();
+        }
+    
+        if (currentTool === 'bucket') {
+            return;
+        }
+    
         drawing = true;
         saveHistory();
         lastPos = getEventPos(canvas, e);
@@ -52,7 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function endPosition(e) {
-        if (e.type.startsWith('touch')) e.preventDefault();
+        if (e.type.startsWith('touch') && currentTool !== 'bucket') {
+            e.preventDefault();
+        }
+    
+        if (currentTool === 'bucket') {
+            return;
+        }
+    
         if (currentTool === 'line' && drawing && lineStartPos) {
             const pos = getEventPos(canvas, e);
             if (pos) {
@@ -177,8 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function draw(e) {
-        if (e.type.startsWith('touch')) e.preventDefault();
-        if (!drawing) return;
+        if (e.type.startsWith('touch') && currentTool !== 'bucket') {
+            e.preventDefault();
+        }
+        if (!drawing || currentTool === 'bucket') return;
 
         const pos = getEventPos(canvas, e);
         if (!pos) return;
