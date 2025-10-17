@@ -1,18 +1,30 @@
+## Índice
+  - [Como Usar](#como-usar)
+  - [Quadro de Ferramentas Criativas](#quadro-de-ferramentas-criativas)
+  - [Painel de Quadros](#painel-de-quadros)
+  - [Quadros Disponíveis](#quadros-disponíveis)
+  - [Quadro de Ideias](#quadro-de-ideias)
+  - [Quadro de Post-its](#quadro-de-post-its)
+  - [Quadro de Desenho](#quadro-de-desenho)
+  
+## Como Usar
+
+Acesse o **Painel de Quadros** através do link: [https://rafaelpoh.github.io/Quadro-de-ideias](https://rafaelpoh.github.io/Quadro-de-ideias). De lá, você pode navegar para qualquer um dos quadros disponíveis.
+
 # Quadro de Ferramentas Criativas
 
 Bem-vindo ao Quadro de Ferramentas Criativas, uma suíte de ferramentas web projetada para ajudar na organização de ideias, anotações e desenhos. Cada ferramenta é salva automaticamente no seu navegador, permitindo que você continue de onde parou.
 
-## Índice
+## Painel de Quadros
 
-- [Como Usar](#como-usar)
-- [Quadros Disponíveis](#quadros-disponíveis)
-  - [Quadro de Ideias](#quadro-de-ideias)
-  - [Quadro de Post-its](#quadro-de-post-its)
-  - [Quadro de Desenho](#quadro-de-desenho)
+O ponto de entrada da aplicação é o **Painel de Quadros**, que centraliza o acesso a todas as ferramentas. Ele consiste em uma barra de navegação lateral que permite carregar os diferentes quadros disponíveis:
 
-## Como Usar
+- **Quadro de Desenho**
+- **Quadro de Ideias**
+- **Quadro de Post-its**
 
-A pagina esta disponivel no link https://rafaelpoh.github.io/Quadro-de-ideias
+Ao clicar em um dos quadros no menu, ele é carregado na área principal da página, permitindo o uso imediato. O menu então se retrai para dar mais espaço à ferramenta selecionada. Para retornar ao menu principal, basta clicar no ícone no topo da barra lateral.
+
 
 ## Quadros Disponíveis
 
@@ -48,6 +60,7 @@ As vezes desenhar a ideia ajuda a esclarecer os pensamentos. Uma tela de desenho
 - **Pincel**: Desenha livremente na tela com a cor e o tamanho selecionados.
 - **Balde de Tinta**: Preenche uma área fechada inteira com a cor selecionada.
 - **Borracha**: Apaga qualquer parte do desenho que corresponda à cor atualmente selecionada.
+- **Linha**: Desenha uma linha reta entre o ponto inicial e final do arrastar do mouse.
 - **Desfazer**: Reverte a última ação realizada no quadro (desenho, preenchimento, apagar ou limpar a tela).
 - **Limpar Quadro**: Apaga todo o desenho da tela.
 - **Salvar Desenho**: Permite baixar o desenho atual como um arquivo de imagem PNG.

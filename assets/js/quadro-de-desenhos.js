@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const brushTool = document.getElementById('brush-tool');
     const bucketTool = document.getElementById('bucket-tool');
     const eraserTool = document.getElementById('eraser-tool');
+    const lineTool = document.getElementById('line-tool');
     const clearCanvasBtn = document.getElementById('clear-canvas');
-    const toolButtons = [brushTool, bucketTool, eraserTool];
+    const toolButtons = [brushTool, bucketTool, eraserTool, lineTool];
 
     // Botões de Ação
     const saveButton = document.getElementById('saveButton');
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let historyStep = -1;
     let currentTool = 'brush'; // Ferramenta padrão
     let lastPos = null;
+    let lineStartPos = null;
 
     function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
@@ -39,25 +41,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startPosition(e) {
+        if (e.type.startsWith('touch')) e.preventDefault();
         drawing = true;
         saveHistory();
-        lastPos = getMousePos(canvas, e);
+        lastPos = getEventPos(canvas, e);
+        if (currentTool === 'line') {
+            lineStartPos = lastPos;
+        }
         draw(e);
     }
 
-    function endPosition() {
+    function endPosition(e) {
+        if (e.type.startsWith('touch')) e.preventDefault();
+        if (currentTool === 'line' && drawing && lineStartPos) {
+            const pos = getEventPos(canvas, e);
+            if (pos) {
+                drawLine(lineStartPos, pos);
+            }
+        }
         drawing = false;
         ctx.beginPath();
         lastPos = null;
+        lineStartPos = null;
         saveDrawingLocally(); // Salva automaticamente
     }
 
-    function getMousePos(canvas, evt) {
+    function getEventPos(canvas, evt) {
         const rect = canvas.getBoundingClientRect();
-        return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-        };
+        let touch;
+        if (evt.touches && evt.touches.length > 0) {
+            touch = evt.touches[0];
+        } else if (evt.changedTouches && evt.changedTouches.length > 0) {
+            touch = evt.changedTouches[0];
+        }
+    
+        if (touch) {
+            return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+        }
+        if (evt.clientX !== undefined && evt.clientY !== undefined) {
+            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+        }
+        return null;
     }
 
     function eraseInCircle(x, y, radius, colorToErase) {
@@ -141,10 +165,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function drawLine(start, end) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = colorPicker.value;
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+    }
+
     function draw(e) {
+        if (e.type.startsWith('touch')) e.preventDefault();
         if (!drawing) return;
 
-        const pos = getMousePos(canvas, e);
+        const pos = getEventPos(canvas, e);
+        if (!pos) return;
 
         if (currentTool === 'brush') {
             ctx.globalCompositeOperation = 'source-over';
@@ -164,6 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     eraseInCircle(x, y, eraserWidth / 2, colorToErase);
                 });
             }
+        } else if (currentTool === 'line' && lineStartPos) {
+            // Restore the canvas to the state before starting to draw the line
+            ctx.putImageData(history[historyStep], 0, 0);
+            drawLine(lineStartPos, pos);
         }
         // Atualiza a última posição para a próxima chamada
         lastPos = pos;
@@ -297,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     brushTool.addEventListener('click', () => setActiveTool('brush'));
     bucketTool.addEventListener('click', () => setActiveTool('bucket'));
     eraserTool.addEventListener('click', () => setActiveTool('eraser'));
+    lineTool.addEventListener('click', () => setActiveTool('line'));
 
     // --- Inicialização ---
     resizeCanvas();
