@@ -5,10 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textColorPicker = document.getElementById('textColorPicker');
     const colorPickerLabel = document.getElementById('colorPickerLabel');
     const fontSizeSelector = document.getElementById('fontSizeSelector');
-    const undoButton = document.getElementById('undoButton');
-    const redoButton = document.getElementById('redoButton');
 
-    const storageKey = 'myNotebookContent'; // Changed key to reflect HTML content
+    const storageKey = 'myNotebookContent';
 
     // Set initial label color
     colorPickerLabel.style.color = textColorPicker.value;
@@ -20,36 +18,56 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Conteúdo salvo com sucesso!');
     }
 
-
     function clearContent() {
         notebook.innerHTML = '';
         localStorage.removeItem(storageKey);
         alert('Conteúdo limpo e removido do armazenamento local!');
     }
-    
+
     // --- Funções da Barra de Ferramentas ---
-    function applyTextColor(color) {
+    function applyStyle(style, value) {
         notebook.focus();
-        document.execCommand('foreColor', false, color);
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+
+        const range = selection.getRangeAt(0);
+        const selectedText = range.toString();
+
+        if (selectedText) {
+            const span = document.createElement('span');
+            span.style[style] = value;
+            span.textContent = selectedText;
+            
+            range.deleteContents();
+            range.insertNode(span);
+
+            // Move o cursor para o final do texto inserido
+            range.setStartAfter(span);
+            range.setEndAfter(span);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+    }
+
+    function applyTextColor(color) {
+        applyStyle('color', color);
     }
 
     function applyFontSize(size) {
-        notebook.focus();
-        document.execCommand('fontSize', false, size);
+        const sizeMap = {
+            '2': '12px',
+            '3': '16px',
+            '4': '20px',
+            '5': '24px',
+            '6': '28px'
+        };
+        applyStyle('fontSize', sizeMap[size]);
     }
 
     // --- Event Listeners ---
     saveButton.addEventListener('click', saveContent);
     clearButton.addEventListener('click', clearContent);
 
-    undoButton.addEventListener('click', () => {
-        document.execCommand('undo');
-    });
-
-    redoButton.addEventListener('click', () => {
-        document.execCommand('redo');
-    });
-    
     textColorPicker.addEventListener('input', () => {
         const selectedColor = textColorPicker.value;
         colorPickerLabel.style.color = selectedColor;
@@ -68,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             notebook.innerHTML = savedContent;
         }
     });
-    
+
     // Opcional: salvar automaticamente ao parar de digitar
     notebook.addEventListener('input', () => {
         localStorage.setItem(storageKey, notebook.innerHTML);
