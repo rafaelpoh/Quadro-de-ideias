@@ -1,0 +1,92 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  overflow: hidden;
+}
+.toolbar {
+  padding: 10px 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.toolbar label {
+  font-weight: 600;
+}
+.toolbar input[type="color"] {
+  border: 1px solid #ccc;
+  padding: 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 40px;
+}
+.toolbar button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.toolbar button:hover {
+  background-color: #f5f5f5;
+  border-color: #bbb;
+}
+.toolbar button.active {
+  background-color: #e7f3ff;
+  border-color: #007bff;
+  color: #007bff;
+}
+.toolbar .separator {
+  border-left: 1px solid #ddd;
+  height: 25px;
+  margin: 0 5px;
+}
+.bi {
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+[role="button"],
+button {
+  cursor: pointer;
+}
+.clear-btn-isolated {
+    position:fixed;
+    right: 5%;
+}
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -15px;
+  margin-left: -15px;
+  display: none;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

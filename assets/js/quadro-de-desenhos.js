@@ -301,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function floodFill(startX, startY, fillColor) {
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
         const startColor = getPixelColor(imageData, startX, startY);
         const newColor = hexToRgba(fillColor);
 
@@ -308,30 +309,48 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const pixelStack = [[startX, startY]];
-        const visited = new Set();
+        const width = canvas.width;
+        const height = canvas.height;
+        const stack = [[startX, startY]];
 
-        function getPixelKey(x, y) {
-            return `${x},${y}`;
-        }
+        while (stack.length) {
+            const [x, y] = stack.pop();
+            let ly = y;
 
-        while (pixelStack.length > 0) {
-            const [x, y] = pixelStack.pop();
-            const pixelKey = getPixelKey(x, y);
-
-            if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height || visited.has(pixelKey)) {
-                continue;
+            while (ly >= 0 && colorsMatch(getPixelColor(imageData, x, ly), startColor)) {
+                ly--;
             }
+            ly++;
 
-            visited.add(pixelKey);
+            let reachedLeft = false;
+            let reachedRight = false;
 
-            if (colorsMatch(getPixelColor(imageData, x, y), startColor)) {
-                setPixelColor(imageData, x, y, newColor);
+            while (ly < height && colorsMatch(getPixelColor(imageData, x, ly), startColor)) {
+                setPixelColor(imageData, x, ly, newColor);
 
-                pixelStack.push([x + 1, y]);
-                pixelStack.push([x - 1, y]);
-                pixelStack.push([x, y + 1]);
-                pixelStack.push([x, y - 1]);
+                if (x > 0) {
+                    if (colorsMatch(getPixelColor(imageData, x - 1, ly), startColor)) {
+                        if (!reachedLeft) {
+                            stack.push([x - 1, ly]);
+                            reachedLeft = true;
+                        }
+                    } else if (reachedLeft) {
+                        reachedLeft = false;
+                    }
+                }
+
+                if (x < width - 1) {
+                    if (colorsMatch(getPixelColor(imageData, x + 1, ly), startColor)) {
+                        if (!reachedRight) {
+                            stack.push([x + 1, ly]);
+                            reachedRight = true;
+                        }
+                    } else if (reachedRight) {
+                        reachedRight = false;
+                    }
+                }
+
+                ly++;
             }
         }
 

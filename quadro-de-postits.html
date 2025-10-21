@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post-it To-Do List</title>
+    <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/skinqp.css">
 </head>
 <body>
@@ -15,11 +16,19 @@
         <label for="fontColorPicker">Cor da Fonte:</label>
         <input type="color" id="fontColorPicker" value="#000000">
         <button id="addNoteBtn">Adicionar Lembrete</button>
+        <button id="showArchivedBtn">Ver Arquivados</button>
     </div>
 
     <div class="note-container" id="note-container">
-        </div>
+    </div>
 
+    <div class="archived-notes-container" id="archived-notes-container" style="display: none;">
+        <h2>Notas Arquivadas</h2>
+        <div class="note-container" id="archived-note-container">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="./assets/js/quadro-de-postits.js"></script>
 
 </body>
